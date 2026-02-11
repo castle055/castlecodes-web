@@ -1,0 +1,33 @@
+// Placeholder to allow defining custom styles that override everything else.
+// (Use `_sass/minima/custom-variables.scss` to override variable defaults)
+
+
+.post-summary {
+  font-size: 14px;
+}
+
+.projects-content {
+  margin-bottom: 40px;
+}
+
+.project-description {
+  font-size: 14px;
+}
+
+.draft_badge {
+  color: #000000;
+  background: #b5e853;
+  font-weight: 800;
+  padding: 0 6px;
+}
+
+.draft_banner {
+  display: block;
+  color: #000000;
+  background: #b5e853;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
