@@ -50,6 +50,7 @@ collections:
 
 include:
   - _pages
+  - /.well-known
 
 social_links:
   - title: Github
