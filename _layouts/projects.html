@@ -28,15 +28,11 @@ layout: base
       {%- assign date_format = site.minima.date_format | default: "%b %Y" -%}
       {%- for project in projects -%}
       <li>
-        <span class="post-meta">{{ project.date | date: date_format }}</span>
-        <h3>
-          <a class="post-link" href="{{ project.url | relative_url }}">
-            {{ project.title | escape }}
-          </a>
-        </h3>
-        <div class="project-description">
+        <a class="post-link" href="{{ project.url | relative_url }}"> {{ project.title | escape }} </a>
+        <span class="project-description">
           {{ project.description }}
-        </div>
+        </span>
+        <p class="post-meta">{{ project.date | date: date_format }}</p>
       </li>
       {%- endfor -%}
     </ul>
