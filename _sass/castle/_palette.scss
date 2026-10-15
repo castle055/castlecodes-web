@@ -1,0 +1,22 @@
+// Site-wide color palette. Single source of truth for both the minima
+// layer (via custom-variables) and the hacker theme overrides.
+
+$c-bg:          #0f1113;  // page background
+$c-surface:     #16191c;  // code blocks, raised elements
+$c-border:      #262a2e;  // hairlines, dividers
+$c-border-hi:   #3a4046;  // hovered borders, table headers
+
+$c-heading:     #e6e8ea;
+$c-text:        #c3c8cc;
+$c-muted:       #7c838a;  // meta, dates, secondary text
+$c-faint:       #555c63;  // decorations
+
+$c-accent:      #9cbf7c;  // muted phosphor green
+$c-accent-dim:  #6e8a57;
+
+$c-link:          $c-accent;
+$c-link-hover-bg: $c-accent;  // hovered links swap fg/bg
+$c-link-hover-fg: $c-bg;
+
+$font-sans: "IBM Plex Sans", -apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+$font-mono: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;

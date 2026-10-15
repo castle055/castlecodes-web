@@ -1,1 +1,30 @@
 // Placeholder to allow overriding predefined variables smoothly.
+
+@import "castle/palette";
+
+$dm-brand-color:           $c-muted;
+$dm-brand-color-light:     $c-text;
+$dm-brand-color-dimmed:    $c-muted;
+$dm-brand-color-dark:      $c-border;
+
+$dm-site-title-color:      $c-accent;
+
+$dm-heading-color:         $c-heading;
+$dm-text-color:            $c-text;
+$dm-background-color:      $c-bg;
+$dm-code-background-color: $c-surface;
+
+$dm-link-base-color:       $c-link;
+$dm-link-visited-color:    $c-link;
+$dm-link-hover-color:      $c-link-hover-fg;
+
+$base-font-family:         $font-sans;
+
+$dm-border-color-01:       $c-border;
+$dm-border-color-02:       $c-border-hi;
+$dm-border-color-03:       $c-muted;
+
+$dm-table-text-color:      $c-text;
+$dm-table-zebra-color:     lighten($c-bg, 2%);
+$dm-table-header-bg-color: $c-surface;
+$dm-table-header-border:   $c-border-hi;

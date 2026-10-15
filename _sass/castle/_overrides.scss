@@ -1,0 +1,141 @@
+// Tones down the hacker theme: no glows, no noise texture, no neon.
+// Loaded after jekyll-theme-hacker so these rules win.
+
+body {
+  background: $c-bg;
+  font-family: $font-sans;
+  line-height: 1.6;
+}
+
+// Keep the terminal feel on the chrome; prose stays sans.
+h1, h2, h3, h4, h5, h6,
+header,
+.site-nav,
+.post-meta,
+code, pre {
+  font-family: $font-mono;
+}
+
+h1, h2, h3, h4, h5, h6,
+header h1,
+a {
+  text-shadow: none;
+}
+
+// Header
+
+header {
+  background: transparent;
+  border-bottom: 1px solid $c-border;
+}
+
+header h1 {
+  color: $c-accent;
+  text-shadow: none;
+
+  &:before {
+    color: $c-faint;
+  }
+}
+
+header h2 {
+  color: $c-muted;
+}
+
+// Text
+
+h1, h2, h3, h4, h5, h6 {
+  color: $c-heading;
+}
+
+a {
+  color: $c-link;
+  // Pad the highlight box without shifting surrounding text.
+  padding: 0 2px;
+  margin: 0 -2px;
+  border-radius: 2px;
+
+  &:visited {
+    color: $c-link;
+  }
+
+  &:hover,
+  &:focus-visible,
+  .site-nav &.nav-item:hover {
+    color: $c-link-hover-fg;
+    background: $c-link-hover-bg;
+    text-decoration: none;
+    outline: none;
+
+    .grey {
+      color: inherit;
+      fill: currentColor;
+    }
+  }
+}
+
+.site-nav .nav-item {
+  color: $c-muted;
+  margin: 0 0 0 8px;
+  padding: 2px 6px;
+}
+
+// The site title link wraps a block h1; keep it out of the swap.
+#a-title,
+#a-title:hover {
+  padding: 0;
+  margin: 0;
+  background: none;
+}
+
+ul li {
+  list-style-image: none;
+  list-style-type: "› ";
+
+  &::marker {
+    color: $c-accent;
+    font-family: $font-mono;
+  }
+}
+
+blockquote {
+  color: $c-muted;
+  border-left: 2px solid $c-border-hi;
+}
+
+hr {
+  border-bottom: 1px solid $c-border;
+  color: $c-border;
+}
+
+th {
+  border-bottom: 1px solid $c-border-hi;
+}
+
+// Code
+
+pre {
+  background: $c-surface;
+  border: 1px solid $c-border;
+  color: $c-text;
+}
+
+code.highlighter-rouge {
+  background: $c-surface;
+  border: 1px solid $c-border;
+  color: $c-heading;
+}
+
+// Footer
+
+.site-footer-1 {
+  color: $c-muted;
+}
+
+.grey {
+  color: $c-muted;
+}
+
+.svg-icon.grey {
+  fill: $c-muted;
+}

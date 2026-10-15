@@ -1,7 +1,38 @@
 ---
 layout: base
 ---
-<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+{% comment %}
+  Observation data is read from the target's front matter. Every field is
+  optional; sections without data are not rendered.
+
+    location: "..."            # where it was shot
+    bortle: 5                  # sky darkness, 1-9
+    equipment:                 # any "Label: value" pairs, shown in order
+      Camera: ...
+      Lens: ...
+    acquisition:               # one entry per session / set of identical lights
+      - date: 2023-08-21
+        frames: 120            # number of light subframes
+        exposure: 2            # seconds per subframe
+        iso: 1600
+        aperture: "f/5.6"
+        focal_length: 200      # mm
+        note: "..."
+    calibration:               # any "Frame type: count" pairs
+      Darks: 30
+      Flats: 30
+    processing:
+      software: [Siril, PixInsight]
+      steps:                   # markdown allowed
+        - "..."
+{% endcomment %}
+{%- assign acq = page.acquisition -%}
+{%- assign proc = page.processing -%}
+{%- assign has_data = false -%}
+{%- if acq or page.calibration or page.equipment or proc or page.location or page.bortle -%}
+  {%- assign has_data = true -%}
+{%- endif -%}
+<article class="post h-entry astro-target" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
     <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
@@ -36,6 +67,112 @@ layout: base
     {{ content }}
   </div>
 
+  {%- if has_data %}
+  <section class="astro-log">
+
+    {%- assign total_frames = 0 -%}
+    {%- assign total_seconds = 0 -%}
+    {%- for s in acq -%}
+      {%- assign total_frames = total_frames | plus: s.frames -%}
+      {%- assign sub_seconds = s.frames | times: s.exposure -%}
+      {%- assign total_seconds = total_seconds | plus: sub_seconds -%}
+    {%- endfor %}
+
+    <dl class="astro-stats">
+      {%- if total_seconds > 0 %}
+      <div><dt>Integration</dt><dd>{% include duration.html seconds=total_seconds %}</dd></div>
+      {%- endif -%}
+      {%- if total_frames > 0 %}
+      <div><dt>Light frames</dt><dd>{{ total_frames }}</dd></div>
+      {%- endif -%}
+      {%- if acq.size > 1 %}
+      <div><dt>Sessions</dt><dd>{{ acq.size }}</dd></div>
+      {%- endif -%}
+      {%- if page.location %}
+      <div><dt>Location</dt><dd>{{ page.location }}</dd></div>
+      {%- endif -%}
+      {%- if page.bortle %}
+      <div><dt>Bortle</dt><dd>{{ page.bortle }}</dd></div>
+      {%- endif %}
+    </dl>
+
+    {%- if acq.size > 0 %}
+    {%- assign col_date  = acq | map: "date" | compact | size -%}
+    {%- assign col_iso   = acq | map: "iso" | compact | size -%}
+    {%- assign col_ap    = acq | map: "aperture" | compact | size -%}
+    {%- assign col_fl    = acq | map: "focal_length" | compact | size -%}
+    {%- assign col_note  = acq | map: "note" | compact | size %}
+    <h2>Acquisition</h2>
+    <div class="table-scroll">
+      <table class="astro-table">
+        <thead>
+          <tr>
+            {%- if col_date > 0 %}<th>Date</th>{% endif %}
+            <th class="num">Frames</th>
+            <th class="num">Exposure</th>
+            {%- if col_iso > 0 %}<th class="num">ISO</th>{% endif %}
+            {%- if col_ap > 0 %}<th>Aperture</th>{% endif %}
+            {%- if col_fl > 0 %}<th class="num">Focal length</th>{% endif %}
+            <th class="num">Integration</th>
+            {%- if col_note > 0 %}<th>Notes</th>{% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          {%- for s in acq %}
+          {%- assign sub_seconds = s.frames | times: s.exposure %}
+          <tr>
+            {%- if col_date > 0 %}<td>{% if s.date %}{{ s.date | date: date_format }}{% endif %}</td>{% endif %}
+            <td class="num">{{ s.frames }}</td>
+            <td class="num">{{ s.exposure }}&#8239;s</td>
+            {%- if col_iso > 0 %}<td class="num">{{ s.iso }}</td>{% endif %}
+            {%- if col_ap > 0 %}<td>{{ s.aperture }}</td>{% endif %}
+            {%- if col_fl > 0 %}<td class="num">{% if s.focal_length %}{{ s.focal_length }}&#8239;mm{% endif %}</td>{% endif %}
+            <td class="num">{% include duration.html seconds=sub_seconds %}</td>
+            {%- if col_note > 0 %}<td>{{ s.note | markdownify | remove: '<p>' | remove: '</p>' | strip }}</td>{% endif %}
+          </tr>
+          {%- endfor %}
+        </tbody>
+      </table>
+    </div>
+    {%- endif %}
+
+    {%- if page.calibration %}
+    <h2>Calibration</h2>
+    <dl class="astro-pairs">
+      {%- for f in page.calibration %}
+      <div><dt>{{ f[0] }}</dt><dd>{{ f[1] }}</dd></div>
+      {%- endfor %}
+    </dl>
+    {%- endif %}
+
+    {%- if page.equipment %}
+    <h2>Equipment</h2>
+    <dl class="astro-pairs">
+      {%- for e in page.equipment %}
+      <div><dt>{{ e[0] }}</dt><dd>{{ e[1] }}</dd></div>
+      {%- endfor %}
+    </dl>
+    {%- endif %}
+
+    {%- if proc %}
+    <h2>Processing</h2>
+    {%- if proc.software %}
+    <p class="astro-software">
+      {%- for sw in proc.software %}<span>{{ sw }}</span>{% endfor -%}
+    </p>
+    {%- endif %}
+    {%- if proc.steps %}
+    <ol class="astro-steps">
+      {%- for step in proc.steps %}
+      <li>{{ step | markdownify | remove: '<p>' | remove: '</p>' | strip }}</li>
+      {%- endfor %}
+    </ol>
+    {%- endif %}
+    {%- endif %}
+
+  </section>
+  {%- endif %}
+
   {% if jekyll.environment == 'production' -%}
     {% if page.comments == false -%}
     <div class="comments-disabled-message">
@@ -48,3 +185,5 @@ layout: base
 
   <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
 </article>
+
+<script src="{{ '/assets/js/lightbox.js' | relative_url }}" defer></script>

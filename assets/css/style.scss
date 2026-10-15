@@ -1,0 +1,15 @@
+---
+# Overrides the hacker theme's assets/css/style.scss so its colors can be tamed.
+---
+
+@import "castle/palette";
+
+$body-background:   $c-bg;
+$body-foreground:   $c-text;
+$header:            $c-heading;
+$blockquote-color:  $c-muted;
+$blockquote-border: $c-border-hi;
+
+@import "jekyll-theme-hacker";
+@import "castle/overrides";
+@import "castle/astro";

@@ -1,0 +1,12 @@
+{%- comment -%} Formats include.seconds as e.g. "2h 05m", "4m 30s" or "45s". {%- endcomment -%}
+{%- assign _t = include.seconds | round -%}
+{%- assign _h = _t | divided_by: 3600 -%}
+{%- assign _m = _t | modulo: 3600 | divided_by: 60 -%}
+{%- assign _s = _t | modulo: 60 -%}
+{%- if _h > 0 -%}
+  {{ _h }}h&#8239;{% if _m < 10 %}0{% endif %}{{ _m }}m
+{%- elsif _m > 0 -%}
+  {{ _m }}m{% if _s > 0 %}&#8239;{% if _s < 10 %}0{% endif %}{{ _s }}s{% endif %}
+{%- else -%}
+  {{ _s }}s
+{%- endif -%}
